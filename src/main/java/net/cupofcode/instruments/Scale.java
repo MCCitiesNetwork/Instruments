@@ -2,7 +2,7 @@ package net.cupofcode.instruments;
 
 import java.util.ArrayList;
 
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 public enum Scale {
 	C_MAJOR, CSHARP_MAJOR, D_MAJOR, DSHARP_MAJOR, E_MAJOR, F_MAJOR, FSHARP_MAJOR, G_MAJOR, GSHARP_MAJOR, A_MAJOR,

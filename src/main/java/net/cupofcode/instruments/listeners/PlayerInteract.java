@@ -102,7 +102,7 @@ public class PlayerInteract implements Listener {
 
         if (clicked != Material.DIRT &&
                 clicked != Material.GRASS_BLOCK
-                && clicked != Material.GRASS_PATH
+                && clicked != Material.DIRT_PATH
                 && clicked != Material.COARSE_DIRT)
             return false;
 
