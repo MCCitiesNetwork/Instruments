@@ -1,5 +1,8 @@
 package net.cupofcode.instruments;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -26,27 +29,49 @@ public enum InstrumentType {
 	private int modelId;
 	private String name;
 	private final Sound sound;
+	private String itemModel;
 
 	InstrumentType(String key, int modelId, Sound sound) {
 		this.key = key;
 		this.modelId = modelId;
 		this.sound = sound;
 		this.name = key;
+		this.itemModel = null; // Will be loaded from config
 	}
 
 	public ItemStack getItemStack() {
-		NamespacedKey key = new NamespacedKey(instance, this.key);
 		ItemStack itemStack = new ItemStack(Material.WOODEN_HOE);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
-		itemMeta.setCustomModelData(this.modelId);
+		// Set unbreakable and hide attributes
 		itemMeta.setUnbreakable(true);
 		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
-		itemMeta.getPersistentDataContainer().set(key, PersistentDataType.DOUBLE, Math.PI);
+		
+		// Set simple NBT tag for instrument identification
+		NamespacedKey instrumentKey = new NamespacedKey(instance, "instrument");
+		itemMeta.getPersistentDataContainer().set(instrumentKey, PersistentDataType.STRING, this.key);
 
-		itemMeta.setDisplayName(Utils.formatString(name));
+		// Set display name using Adventure Component
+		itemMeta.displayName(Component.text(Utils.formatString(name)));
 
 		itemStack.setItemMeta(itemMeta);
+
+		// Use Data Component API for item model if available
+		if (itemModel != null && !itemModel.isEmpty()) {
+			try {
+				// Parse the item model (format: namespace:path)
+				String[] parts = itemModel.split(":", 2);
+				if (parts.length == 2) {
+					NamespacedKey modelKey = new NamespacedKey(parts[0], parts[1]);
+					
+					// Use Data Component API to set the item model
+					itemStack.setData(DataComponentTypes.ITEM_MODEL, Key.key(itemModel));
+				}
+			} catch (Exception e) {
+				// Fallback to CustomModelData if Data Component API fails
+				e.printStackTrace();
+			}
+		}
 		return itemStack;
 	}
 
@@ -55,14 +80,13 @@ public enum InstrumentType {
 			return null;
 
 		PersistentDataContainer holder = itemStack.getItemMeta().getPersistentDataContainer();
-
-		for (InstrumentType instrumentType : InstrumentType.values()) {
-			NamespacedKey key = new NamespacedKey(Instruments.getInstance(), instrumentType.getKey());
-			if (holder.has(key, PersistentDataType.DOUBLE))
-				return instrumentType;
-		}
-
-		return null;
+		NamespacedKey instrumentKey = new NamespacedKey(Instruments.getInstance(), "instrument");
+		
+		if (!holder.has(instrumentKey, PersistentDataType.STRING))
+			return null;
+			
+		String instrumentTypeKey = holder.get(instrumentKey, PersistentDataType.STRING);
+		return getInstrumentTypeByKey(instrumentTypeKey);
 	}
 
 	public static InstrumentType getInstrumentTypeByKey(String key) {
@@ -105,5 +129,13 @@ public enum InstrumentType {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getItemModel() {
+		return itemModel;
+	}
+
+	public void setItemModel(String itemModel) {
+		this.itemModel = itemModel;
 	}
 }

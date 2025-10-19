@@ -1,0 +1,37 @@
+settings:
+  instruments:
+    permissions: true
+
+instruments:
+  piano:
+    item_model: nexo:instrument_piano
+  bass_drum:
+    item_model: nexo:instrument_bass_drum
+  snare_drum:
+    item_model: nexo:instrument_snare_drum
+  sticks:
+    item_model: nexo:instrument_sticks
+  bass_guitar:
+    item_model: nexo:instrument_bass_guitar
+  flute:
+    item_model: nexo:instrument_flute
+  bell:
+    item_model: nexo:instrument_bell
+  guitar:
+    item_model: nexo:instrument_guitar
+  chime:
+    item_model: nexo:instrument_chime
+  xylophone:
+    item_model: nexo:instrument_xylophone
+  iron_xylophone:
+    item_model: nexo:instrument_iron_xylophone
+  cow_bell:
+    item_model: nexo:instrument_cow_bell
+  didgeridoo:
+    item_model: nexo:instrument_didgeridoo
+  bit:
+    item_model: nexo:instrument_bit
+  banjo:
+    item_model: nexo:instrument_banjo
+  pling:
+    item_model: nexo:instrument_pling
