@@ -34,6 +34,7 @@ public class Instruments extends JavaPlugin {
 
 	private static Instruments instance;
 	private HashMap<Player, Instrument> instrumentManager = new HashMap<>();
+	private HashMap<Integer, Player> entityIdToPlayer = new HashMap<>();
 	private File configFile;
 	private FileConfiguration config;
 
@@ -58,6 +59,7 @@ public class Instruments extends JavaPlugin {
 
 		// Initialize PacketEvents
 		PacketEvents.getAPI().load();
+		PacketEvents.getAPI().init();
 
 		// Disables arm swing animation while player is in hotbar mode
 		PacketEvents.getAPI().getEventManager().registerListener(new PacketListener() {
@@ -72,12 +74,8 @@ public class Instruments extends JavaPlugin {
 					WrapperPlayServerEntityAnimation animationPacket = new WrapperPlayServerEntityAnimation(event);
 					int senderId = animationPacket.getEntityId();
 
-					Player sender = null;
-					for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-						if (onlinePlayer.getEntityId() == senderId)
-							sender = onlinePlayer;
-					}
-
+					// Efficient player lookup using cached mapping
+					Player sender = entityIdToPlayer.get(senderId);
 					if (sender == null || !instrumentManager.containsKey(sender))
 						return;
 
@@ -86,16 +84,6 @@ public class Instruments extends JavaPlugin {
 				}
 			}
 		}, PacketListenerPriority.NORMAL);
-
-		// Start PacketEvents with delayed initialization to avoid NPE
-		Bukkit.getScheduler().runTaskLater(this, () -> {
-			try {
-				PacketEvents.getAPI().init();
-			} catch (Exception e) {
-				Bukkit.getLogger().warning("[Instruments] Failed to initialize PacketEvents: " + e.getMessage());
-				// Continue without PacketEvents functionality
-			}
-		}, 1L); // 1 tick delay
 
 		// Add bStats
 		Metrics metrics = new Metrics(this, 9792);
@@ -135,6 +123,14 @@ public class Instruments extends JavaPlugin {
 
 	public static Instruments getInstance() {
 		return instance;
+	}
+
+	public void addPlayer(Player player) {
+		entityIdToPlayer.put(player.getEntityId(), player);
+	}
+
+	public void removePlayer(Player player) {
+		entityIdToPlayer.remove(player.getEntityId());
 	}
 
 	private void loadConfig() {

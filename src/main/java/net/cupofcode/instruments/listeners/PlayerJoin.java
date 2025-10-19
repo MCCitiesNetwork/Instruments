@@ -17,6 +17,9 @@ public class PlayerJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        // Add player to entity ID mapping for efficient packet handling
+        instance.addPlayer(player);
+
         if(instance.getConfig().getBoolean("settings.instruments.resourcepack.enabled")) {
             player.setResourcePack("https://www.dropbox.com/s/qav6cbju12g7ci1/CupOfCode_Orchestra_V_05.zip?dl=1");
         }
