@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'net.cupofcode'
-version = '1.7'
+version = '2.0'
 description = 'Adds various instruments to your server'
 
 java {

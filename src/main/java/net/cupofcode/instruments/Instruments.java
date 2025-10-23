@@ -7,7 +7,6 @@ import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
-import net.cupofcode.instruments.bstats.Metrics;
 import net.cupofcode.instruments.commands.PaperInstrumentsCommand;
 import net.cupofcode.instruments.listeners.*;
 import io.papermc.paper.command.brigadier.Commands;
@@ -84,17 +83,11 @@ public class Instruments extends JavaPlugin {
 				}
 			}
 		}, PacketListenerPriority.NORMAL);
-
-		// Add bStats
-		Metrics metrics = new Metrics(this, 9792);
-		Bukkit.getLogger()
-				.info("[Instruments] bStats: " + metrics.isEnabled() + " plugin ver: " + getDescription().getVersion());
-
-		metrics.addCustomChart(new Metrics.SimplePie("plugin_version", () -> getDescription().getVersion()));
 	}
 
 	@Override
 	public void onDisable() {
+		// Clean up all players and their instrument states
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (!instrumentManager.containsKey(player))
 				continue;
@@ -104,6 +97,12 @@ public class Instruments extends JavaPlugin {
 
 			instrumentManager.remove(player);
 		}
+
+		// Clear entity ID mapping to prevent memory leaks
+		entityIdToPlayer.clear();
+
+		// Clear inventory mappings to prevent memory leaks
+		Utils.inventoryMap.clear();
 
 		// Terminate PacketEvents
 		try {
