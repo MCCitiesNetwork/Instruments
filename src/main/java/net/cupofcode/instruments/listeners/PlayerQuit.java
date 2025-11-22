@@ -15,9 +15,6 @@ public class PlayerQuit implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         
-        // Remove player from entity ID mapping
-        instance.removePlayer(player);
-        
         if(!instance.getInstrumentManager().containsKey(player)) return;
 
         if(instance.getInstrumentManager().get(event.getPlayer()).isHotBarMode())

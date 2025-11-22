@@ -3,5 +3,4 @@ name: Instruments
 version: '${version}'
 description: Adds various net.cupofcode.instruments to your server
 author: CupOfCode
-api-version: 1.21
-depend: [packetevents] 
+api-version: 1.21 

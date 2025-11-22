@@ -58,18 +58,13 @@ public enum InstrumentType {
 
 		// Use Data Component API for item model if available
 		if (itemModel != null && !itemModel.isEmpty()) {
-			try {
-				// Parse the item model (format: namespace:path)
-				String[] parts = itemModel.split(":", 2);
-				if (parts.length == 2) {
-					NamespacedKey modelKey = new NamespacedKey(parts[0], parts[1]);
-					
-					// Use Data Component API to set the item model
-					itemStack.setData(DataComponentTypes.ITEM_MODEL, Key.key(itemModel));
-				}
-			} catch (Exception e) {
-				// Fallback to CustomModelData if Data Component API fails
-				e.printStackTrace();
+			// Parse the item model (format: namespace:path)
+			String[] parts = itemModel.split(":", 2);
+			if (parts.length == 2) {
+				NamespacedKey modelKey = new NamespacedKey(parts[0], parts[1]);
+				
+				// Use Data Component API to set the item model
+				itemStack.setData(DataComponentTypes.ITEM_MODEL, Key.key(itemModel));
 			}
 		}
 		return itemStack;

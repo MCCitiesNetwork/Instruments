@@ -6,7 +6,6 @@ A modern Minecraft plugin for Paper/Spigot that adds playable musical instrument
 
 - **16 Different Instruments**: Piano, Bass Drum, Snare Drum, Sticks, Bass Guitar, Flute, Bell, Guitar, Chime, Xylophone, Iron Xylophone, Cow Bell, Didgeridoo, Bit, Banjo, and Pling
 - **Modern Item Models**: Uses Paper's Data Component API with `item_model` for custom 3D models
-- **Resource Pack Integration**: Supports custom models via resource packs (namespace: `nexo`)
 - **Hotbar Mode**: Play instruments directly from your hotbar
 - **Scale System**: Built-in musical scales for organized playing
 - **Paper API Support**: Optimized for Paper servers with modern APIs
@@ -15,7 +14,6 @@ A modern Minecraft plugin for Paper/Spigot that adds playable musical instrument
 
 - **Server**: Paper 1.21+ (recommended) or Spigot 1.21+
 - **Java**: Java 21+
-- **Resource Pack**: Custom models require a resource pack with the `nexo` namespace
   
 ## Configuration
 
